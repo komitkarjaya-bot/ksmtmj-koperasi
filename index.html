@@ -53,7 +53,7 @@ if (!token) {
     "<p class='error'>Token tidak ditemukan. Silakan login ulang.</p>";
 } else {
 
-  fetch("https://kopsyahmitratani.blogspot.com/p/dashboard-anggota.html?token=cec21815-6842-4c35-906d-c637c777c6dc?action=data&token=" + encodeURIComponent(token))
+  fetch("https://script.google.com/macros/s/AKfycbwk1SJpgMyEr9tiunYpy0kEuXzp_aJzi_dz6BA0R_h45SDAz3hTNrOipnTX8EGaBLqU/exec?action=data&token=" + encodeURIComponent(token))
     .then(res => res.json())
     .then(data => {
 
