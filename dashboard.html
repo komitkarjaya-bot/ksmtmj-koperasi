@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Anggota | Kopsyah MTMJ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 420px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  }
+  h2 {
+    text-align: center;
+    color: #2e7d32;
+  }
+  .loading, .error {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+  }
+  .error {
+    color: red;
+  }
+  .row {
+    margin: 10px 0;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 8px;
+  }
+  .label {
+    font-size: 12px;
+    color: #777;
+  }
+  .value {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .saldo {
+    color: #2e7d32;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #c62828;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Dashboard Anggota</h2>
+
+  <div id="loading" class="loading">
+    ⏳ Memuat data anggota...
+  </div>
+
+  <div id="error" class="error" style="display:none"></div>
+
+  <div id="data" style="display:none">
+    <div class="row">
+      <div class="label">Nomor Anggota</div>
+      <div class="value" id="noanggota"></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Nama</div>
+      <div class="value" id="nama"></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Email</div>
+      <div class="value" id="email"></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Simpanan Pokok</div>
+      <div class="value saldo" id="pokok"></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Simpanan Wajib</div>
+      <div class="value saldo" id="wajib"></div>
+    </div>
+
+    <div class="row">
+      <div class="label">Simpanan Sukarela</div>
+      <div class="value saldo" id="sukarela"></div>
+    </div>
+
+    <button class="btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get("token");
+
+if (!token) {
+  showError("Token tidak ditemukan. Silakan login ulang.");
+} else {
+  loadDashboard(token);
+}
+
+function loadDashboard(token) {
+
+  const apiUrl = "https://script.google.com/macros/s/AKfycbxbxPj66Csu0VqKh1EGN4cVnM5G_rd74qKj2Dr-hk2AsNmyFpkw_u973VTQO0nzUljx/exec?token=" + token;
+
+  fetch(apiUrl)
+    .then(res => res.json())
+    .then(data => {
+
+      document.getElementById("loading").style.display = "none";
+
+      if (data.error) {
+        showError(data.error);
+        return;
+      }
+
+      document.getElementById("data").style.display = "block";
+      document.getElementById("noanggota").innerText = data.noanggota;
+      document.getElementById("nama").innerText = data.nama;
+      document.getElementById("email").innerText = data.email;
+      document.getElementById("pokok").innerText = formatRupiah(data.pokok);
+      document.getElementById("wajib").innerText = formatRupiah(data.wajib);
+      document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
+
+    })
+    .catch(() => {
+      showError("Gagal menghubungi server.");
+    });
+}
+
+function showError(msg) {
+  document.getElementById("loading").style.display = "none";
+  const e = document.getElementById("error");
+  e.style.display = "block";
+  e.innerText = msg;
+}
+
+function formatRupiah(angka) {
+  return "Rp " + Number(angka).toLocaleString("id-ID");
+}
+
+function logout() {
+  alert("Silakan tutup halaman ini atau login ulang.");
+}
+</script>
+
+</body>
+</html>
