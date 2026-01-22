@@ -110,45 +110,50 @@
 </div>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get("token");
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
 
 if (!token) {
   showError("Token tidak ditemukan. Silakan login ulang.");
 } else {
-  loadDashboard(token);
+  loadDashboardJSONP(token);
 }
 
-function loadDashboard(token) {
+function loadDashboardJSONP(token) {
 
-  const apiUrl = "https://script.google.com/macros/s/AKfycbwajnyMZcVH5ZKE3NcSxTwALoIt8ffd6ZAS47zuETLyiVXSBWBFCkUw0Loxih8UqLz-/exec?token=" + token;
+  const callbackName = "cb_" + Date.now();
 
-      fetch(apiUrl, {
-  method: "GET",
-  mode: "cors"
-})
-    .then(res => res.json())
-    .then(data => {
+  window[callbackName] = function (data) {
 
-      document.getElementById("loading").style.display = "none";
+    document.getElementById("loading").style.display = "none";
 
-      if (data.error) {
-        showError(data.error);
-        return;
-      }
+    if (data.error) {
+      showError(data.error);
+      return;
+    }
 
-      document.getElementById("data").style.display = "block";
-      document.getElementById("noanggota").innerText = data.noanggota;
-      document.getElementById("nama").innerText = data.nama;
-      document.getElementById("email").innerText = data.email;
-      document.getElementById("pokok").innerText = formatRupiah(data.pokok);
-      document.getElementById("wajib").innerText = formatRupiah(data.wajib);
-      document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
+    document.getElementById("data").style.display = "block";
+    document.getElementById("noanggota").innerText = data.noanggota;
+    document.getElementById("nama").innerText = data.nama;
+    document.getElementById("email").innerText = data.email;
+    document.getElementById("pokok").innerText = formatRupiah(data.pokok);
+    document.getElementById("wajib").innerText = formatRupiah(data.wajib);
+    document.getElementById("sukarela").innerText = formatRupiah(data.sukarela;
 
-    })
-    .catch(() => {
-      showError("Gagal menghubungi server.");
-    });
+    delete window[callbackName];
+  };
+
+  const script = document.createElement("script");
+  script.src =
+    "https://script.google.com/macros/s/AKfycby0byagmf3xMu3_EAIjQoOATRg3Wk4Ehby0fnt6-hrzXG4DNu2AHRH3xYzz8x1C3oAh/exec" +
+    "?token=" + encodeURIComponent(token) +
+    "&callback=" + callbackName;
+
+  script.onerror = function () {
+    showError("Gagal menghubungi server (JSONP).");
+  };
+
+  document.body.appendChild(script);
 }
 
 function showError(msg) {
@@ -158,15 +163,11 @@ function showError(msg) {
   e.innerText = msg;
 }
 
-function formatRupiah(angka) {
-  return "Rp " + Number(angka).toLocaleString("id-ID");
-}
-
-function logout() {
-  alert("Silakan tutup halaman ini atau login ulang.");
+function formatRupiah(n) {
+  return "Rp " + Number(n).toLocaleString("id-ID");
 }
 </script>
-console.log("API URL:", apiUrl);
+
 
 </body>
 </html>
