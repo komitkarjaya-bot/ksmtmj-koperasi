@@ -121,9 +121,12 @@ if (!token) {
 
 function loadDashboard(token) {
 
-  const apiUrl = "https://script.google.com/macros/s/AKfycbyIX6oCM9Ao73eEL7QXNFEoHP61XadEE__DifTzR8uHAE-SY5xcmrFzaqSoLDTER07r/exec?token=" + token;
+  const apiUrl = "https://script.google.com/macros/s/AKfycbwajnyMZcVH5ZKE3NcSxTwALoIt8ffd6ZAS47zuETLyiVXSBWBFCkUw0Loxih8UqLz-/exec?token=" + token;
 
-  fetch(apiUrl)
+      fetch(apiUrl, {
+  method: "GET",
+  mode: "cors"
+})
     .then(res => res.json())
     .then(data => {
 
