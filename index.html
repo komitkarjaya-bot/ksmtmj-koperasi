@@ -53,7 +53,7 @@ if (!token) {
     "<p class='error'>Token tidak ditemukan. Silakan login ulang.</p>";
 } else {
 
-  fetch("https://script.google.com/macros/s/AKfycbynmfSnc5fjtywkr53_N2-rM-okpkKW_QFOpWzV9eqEgmFsXmm7mryKYQaFdgtQNDq2/exec?action=data&token=" + encodeURIComponent(token))
+  fetch("https://script.google.com/macros/s/AKfycbxbxPj66Csu0VqKh1EGN4cVnM5G_rd74qKj2Dr-hk2AsNmyFpkw_u973VTQO0nzUljx/exec?action=data&token=" + encodeURIComponent(token))
     .then(res => res.json())
     .then(data => {
 
