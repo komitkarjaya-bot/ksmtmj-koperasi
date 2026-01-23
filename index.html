@@ -1,87 +1,67 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard Anggota KMTMJ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f7;
-      padding: 20px;
-    }
-    .card {
-      max-width: 420px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0,0,0,.1);
-    }
-    h3 {
-      margin-top: 0;
-      color: #1b5e20;
-      text-align: center;
-    }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .row:last-child { border-bottom: none; }
-    .label { color: #555; }
-    .value { font-weight: bold; }
-    .error {
-      color: red;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-
-<div class="card" id="app">
-  Memuat data...
-</div>
-
 <script>
 const params = new URLSearchParams(window.location.search);
 const token = params.get("token");
 
 if (!token) {
-  document.getElementById("app").innerHTML =
-    "<p class='error'>Token tidak ditemukan. Silakan login ulang.</p>";
+  showError("Token tidak ditemukan. Silakan login ulang.");
 } else {
+  loadDashboardJSONP(token);
+}
 
-  fetch("https://script.google.com/macros/s/AKfycbxbxPj66Csu0VqKh1EGN4cVnM5G_rd74qKj2Dr-hk2AsNmyFpkw_u973VTQO0nzUljx/exec?action=data&token=" + encodeURIComponent(token))
-    .then(res => res.json())
-    .then(data => {
+function loadDashboardJSONP(token) {
 
-      if (!data || data.error) {
-        document.getElementById("app").innerHTML =
-          "<p class='error'>Session tidak valid / sudah berakhir</p>";
-        return;
-      }
+  // 🧹 bersihkan script JSONP lama
+  const old = document.getElementById("jsonpScript");
+  if (old) old.remove();
 
-      document.getElementById("app").innerHTML = `
-        <h3>Dashboard Anggota</h3>
+  const callbackName = "cb_" + Math.random().toString(36).substr(2, 9);
 
-        <div class="row"><div class="label">No Anggota</div><div class="value">${data.noanggota}</div></div>
-        <div class="row"><div class="label">Nama</div><div class="value">${data.nama}</div></div>
-        <div class="row"><div class="label">Email</div><div class="value">${data.email}</div></div>
-        <div class="row"><div class="label">Simpanan Pokok</div><div class="value">Rp ${Number(data.pokok).toLocaleString("id-ID")}</div></div>
-        <div class="row"><div class="label">Simpanan Wajib</div><div class="value">Rp ${Number(data.wajib).toLocaleString("id-ID")}</div></div>
-        <div class="row"><div class="label">Simpanan Sukarela</div><div class="value">Rp ${Number(data.sukarela).toLocaleString("id-ID")}</div></div>
-        <div class="row"><div class="label">Status</div><div class="value">${data.status}</div></div>
-      `;
-    })
-    .catch(err => {
-      document.getElementById("app").innerHTML =
-        "<p class='error'>Gagal menghubungi server</p>";
-      console.error(err);
-    });
+  window[callbackName] = function (data) {
+
+    // 🧹 bersih-bersih
+    delete window[callbackName];
+    const s = document.getElementById("jsonpScript");
+    if (s) s.remove();
+
+    document.getElementById("loading").style.display = "none";
+
+    if (!data || data.error) {
+      showError(data?.error || "Data kosong dari server");
+      return;
+    }
+
+    document.getElementById("data").style.display = "block";
+    document.getElementById("noanggota").innerText = data.noanggota;
+    document.getElementById("nama").innerText = data.nama;
+    document.getElementById("email").innerText = data.email;
+    document.getElementById("pokok").innerText = formatRupiah(data.pokok);
+    document.getElementById("wajib").innerText = formatRupiah(data.wajib);
+    document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
+  };
+
+  const script = document.createElement("script");
+  script.id = "jsonpScript";
+  script.src =
+    "https://script.google.com/macros/s/AKfycbzoV_72G_J2gJuIz_0x-YIH8FywX4eh45bjkpme9-EySpXE6zKbhwwFw9G3qivzf-AT/exec" +
+    "?token=" + encodeURIComponent(token) +
+    "&callback=" + callbackName;
+
+  script.onerror = function () {
+    delete window[callbackName];
+    showError("Gagal menghubungi server (JSONP).");
+  };
+
+  document.body.appendChild(script);
+}
+
+function showError(msg) {
+  document.getElementById("loading").style.display = "none";
+  const e = document.getElementById("error");
+  e.style.display = "block";
+  e.innerText = msg;
+}
+
+function formatRupiah(n) {
+  return "Rp " + Number(n || 0).toLocaleString("id-ID");
 }
 </script>
-
-</body>
-</html>
