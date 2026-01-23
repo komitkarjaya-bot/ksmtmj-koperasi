@@ -10,14 +10,23 @@ if (!token) {
 
 function loadDashboardJSONP(token) {
 
-  const callbackName = "cb_" + Date.now();
+  // 🧹 bersihkan script JSONP lama
+  const old = document.getElementById("jsonpScript");
+  if (old) old.remove();
+
+  const callbackName = "cb_" + Math.random().toString(36).substr(2, 9);
 
   window[callbackName] = function (data) {
 
+    // 🧹 bersih-bersih
+    delete window[callbackName];
+    const s = document.getElementById("jsonpScript");
+    if (s) s.remove();
+
     document.getElementById("loading").style.display = "none";
 
-    if (data.error) {
-      showError(data.error);
+    if (!data || data.error) {
+      showError(data?.error || "Data kosong dari server");
       return;
     }
 
@@ -28,17 +37,17 @@ function loadDashboardJSONP(token) {
     document.getElementById("pokok").innerText = formatRupiah(data.pokok);
     document.getElementById("wajib").innerText = formatRupiah(data.wajib);
     document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
-
-    delete window[callbackName];
   };
 
   const script = document.createElement("script");
+  script.id = "jsonpScript";
   script.src =
     "https://script.google.com/macros/s/AKfycbxg5EIpkFOeekIRBFuxN-4v3qeLrDQKBvuJ1evcOlPjTXN2Z1bYkYmjZllZD1ThPt3O/exec" +
     "?token=" + encodeURIComponent(token) +
     "&callback=" + callbackName;
 
   script.onerror = function () {
+    delete window[callbackName];
     showError("Gagal menghubungi server (JSONP).");
   };
 
@@ -53,6 +62,6 @@ function showError(msg) {
 }
 
 function formatRupiah(n) {
-  return "Rp " + Number(n).toLocaleString("id-ID");
+  return "Rp " + Number(n || 0).toLocaleString("id-ID");
 }
 </script>
