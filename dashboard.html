@@ -1,28 +1,42 @@
-</body>
-<script>
-const params = new URLSearchParams(window.location.search);
-const token = params.get("token");
+<body>
 
-if (!token) {
-  showError("Token tidak ditemukan. Silakan login ulang.");
-} else {
+<h2>Dashboard Anggota</h2>
+
+<div id="loading">⏳ Memuat data anggota...</div>
+<div id="error" style="display:none;color:red"></div>
+
+<div id="data" style="display:none">
+  <p>No Anggota: <span id="noanggota"></span></p>
+  <p>Nama: <span id="nama"></span></p>
+  <p>Email: <span id="email"></span></p>
+  <p>Simpanan Pokok: <span id="pokok"></span></p>
+  <p>Simpanan Wajib: <span id="wajib"></span></p>
+  <p>Simpanan Sukarela: <span id="sukarela"></span></p>
+</div>
+
+<!-- 🔥 SCRIPT HARUS DI SINI -->
+<script>
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (!token) {
+    showError("Token tidak ditemukan. Silakan login ulang.");
+    return;
+  }
+
   loadDashboardJSONP(token);
-}
+});
 
 function loadDashboardJSONP(token) {
 
-  // 🧹 bersihkan script JSONP lama
-  const old = document.getElementById("jsonpScript");
-  if (old) old.remove();
-
-  const callbackName = "cb_" + Math.random().toString(36).substr(2, 9);
+  const callbackName = "cb_" + Date.now();
 
   window[callbackName] = function (data) {
 
-    // 🧹 bersih-bersih
     delete window[callbackName];
-    const s = document.getElementById("jsonpScript");
-    if (s) s.remove();
 
     document.getElementById("loading").style.display = "none";
 
@@ -41,18 +55,16 @@ function loadDashboardJSONP(token) {
   };
 
   const script = document.createElement("script");
-  script.id = "jsonpScript";
   script.src =
     "https://script.google.com/macros/s/AKfycbzoV_72G_J2gJuIz_0x-YIH8FywX4eh45bjkpme9-EySpXE6zKbhwwFw9G3qivzf-AT/exec" +
     "?token=" + encodeURIComponent(token) +
     "&callback=" + callbackName;
 
   script.onerror = function () {
-    delete window[callbackName];
     showError("Gagal menghubungi server (JSONP).");
   };
 
-  (document.head || document.body).appendChild(script);
+  document.head.appendChild(script);
 }
 
 function showError(msg) {
@@ -66,4 +78,8 @@ function formatRupiah(n) {
   return "Rp " + Number(n || 0).toLocaleString("id-ID");
 }
 </script>
+
+</script>
+
+</body>
 </html>
