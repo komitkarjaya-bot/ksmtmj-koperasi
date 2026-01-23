@@ -51,7 +51,7 @@ function loadDashboardJSONP(token) {
     showError("Gagal menghubungi server (JSONP).");
   };
 
-  document.body.appendChild(script);
+  (document.head || document.body).appendChild(script);
 }
 
 function showError(msg) {
