@@ -51,20 +51,19 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("wajib").innerText = formatRupiah(data.wajib);
       document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
     };
+fetch(
+  "https://script.google.com/macros/s/AKfycbz_EKJm16f84j6cC9VrpivDgeJ_raTsA9iTVzXWlerLZUhna53S9jaS4OxcAfEyjyJo/exec?token=" + token
+)
+.then(r => r.json())
+.then(data => {
+  document.getElementById("loading").style.display = "none";
+  if (data.error) return showError(data.error);
 
-    const script = document.createElement("script");
-    script.id = "jsonpScript";
-    script.src =
-      "https://script.google.com/macros/s/AKfycbzoV_72G_J2gJuIz_0x-YIH8FywX4eh45bjkpme9-EySpXE6zKbhwwFw9G3qivzf-AT/exec" +
-      "?token=" + encodeURIComponent(token) +
-      "&callback=" + callbackName;
+  document.getElementById("data").style.display = "block";
+  document.getElementById("noanggota").innerText = data.noanggota;
+  document.getElementById("nama").innerText = data.nama;
+  document.getElementById("email").innerText = data.email;
 
-    script.onerror = function () {
-      delete window[callbackName];
-      showError("Gagal menghubungi server (JSONP).");
-    };
-
-    document.body.appendChild(script);
   }
 
   function showError(msg) {
