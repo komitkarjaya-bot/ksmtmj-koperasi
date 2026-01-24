@@ -12,6 +12,25 @@
   <p>Simpanan Wajib: <span id="wajib"></span></p>
   <p>Simpanan Sukarela: <span id="sukarela"></span></p>
 </div>
+<script>
+function isInAppBrowser() {
+  const ua = navigator.userAgent || navigator.vendor;
+  return /FBAN|FBAV|Instagram|Line|WhatsApp|Gmail/i.test(ua);
+}
+
+if (isInAppBrowser()) {
+  document.body.innerHTML = `
+    <h3>⚠️ Perhatian</h3>
+    <p>Dashboard tidak bisa dibuka di aplikasi ini.</p>
+    <button onclick="openInBrowser()">Buka di Browser</button>
+  `;
+}
+
+function openInBrowser() {
+  const url = window.location.href;
+  window.open(url, "_blank");
+}
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
