@@ -2,7 +2,7 @@
 
 <h2>Dashboard Anggota</h2>
 
-<div id="loading">⏳ Memuat data anggota...</div>
+<div id="loading">? Memuat data anggota...</div>
 <div id="error" style="display:none;color:red"></div>
 
 <div id="data" style="display:none">
@@ -63,9 +63,7 @@ fetch(
   document.getElementById("noanggota").innerText = data.noanggota;
   document.getElementById("nama").innerText = data.nama;
   document.getElementById("email").innerText = data.email;
-  document.getElementById("pokok").innerText = formatRupiah(data.pokok);
-  document.getElementById("wajib").innerText = formatRupiah(data.wajib);
-  document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
+
   }
 
   function showError(msg) {
@@ -80,45 +78,7 @@ fetch(
   }
 
 });
-<script>
-function isInAppBrowser() {
-  const ua = navigator.userAgent || navigator.vendor;
-  return /FBAN|FBAV|Instagram|Line|WhatsApp|Gmail/i.test(ua);
-}
-
-if (isInAppBrowser()) {
-  document.body.innerHTML = `
-    <h3>⚠️ Perhatian</h3>
-    <p>Dashboard tidak bisa dibuka di aplikasi ini.</p>
-    <button onclick="openInBrowser()">Buka di Browser</button>
-  `;
-}
-
-function openInBrowser() {
-  const url = window.location.href;
-  window.open(url, "_blank");
-}
-</script>
-<script>
-function isInAppBrowser() {
-  const ua = navigator.userAgent || navigator.vendor;
-  return /FBAN|FBAV|Instagram|Line|WhatsApp|Gmail/i.test(ua);
-}
-
-if (isInAppBrowser()) {
-  document.body.innerHTML = `
-    <h3>⚠️ Perhatian</h3>
-    <p>Dashboard tidak bisa dibuka di aplikasi ini.</p>
-    <button onclick="openInBrowser()">Buka di Browser</button>
-  `;
-}
-
-function openInBrowser() {
-  const url = window.location.href;
-  window.open(url, "_blank");
-}
 </script>
 
-  
 </body>
 </html>
