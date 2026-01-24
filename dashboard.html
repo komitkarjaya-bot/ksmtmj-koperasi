@@ -80,24 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-</script>
- <div id="error" style="display:none;color:red"></div>
-  <div id="openBrowser" style="display:none;margin-top:15px;">
-  <button onclick="openInChrome()">
-    🔗 Buka di Browser
-  </button>
-  </div>
- 
- <script>
-function openInChrome() {
-  const url = window.location.href;
-  window.open(url, "_blank");
- 
-script.onerror = function () {
-  delete window[callbackName];
-  showError("Gagal memuat data. Silakan buka di browser.");
-  document.getElementById("openBrowser").style.display = "block";
-<script>  
 <script>
 function isInAppBrowser() {
   const ua = navigator.userAgent || navigator.vendor;
@@ -116,8 +98,9 @@ function openInBrowser() {
   const url = window.location.href;
   window.open(url, "_blank");
 }
-</script>
 });
+</script>
+
  
 </body>
 </html>
