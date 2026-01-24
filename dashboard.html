@@ -26,7 +26,7 @@ function openInChrome() {
   const url = window.location.href;
   window.open(url, "_blank");
 }
-</script>
+<script>
 script.onerror = function () {
   delete window[callbackName];
   showError("Gagal memuat data. Silakan buka di browser.");
