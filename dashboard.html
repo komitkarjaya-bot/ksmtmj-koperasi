@@ -23,6 +23,7 @@
 function openInChrome() {
   const url = window.location.href;
   window.open(url, "_blank");
+ <script>
 script.onerror = function () {
   delete window[callbackName];
   showError("Gagal memuat data. Silakan buka di browser.");
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const script = document.createElement("script");
     script.id = "jsonpScript";
     script.src =
-    "https://script.google.com/macros/s/AKfycbyiuU5gE2hlfacvP2HwmicckLiQwGiQU8XuOVRpYC3btTWaqNwI_3FdXgU4lY4XM1Va/exec" +
+    "https://script.google.com/macros/s/AKfycbwSPKnF3jzec1kS2bS0zGWB5CIQdHPy1C8NcfEIBzq9WN8U5YoH1CZLlLLGG4yzy1tQ/exec" +
     "?token=" + encodeURIComponent(token) +
     "&callback=" + callbackName +
     "&_ts=" + Date.now();
