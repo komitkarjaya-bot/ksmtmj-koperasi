@@ -25,13 +25,10 @@
 function openInChrome() {
   const url = window.location.href;
   window.open(url, "_blank");
-}
-<script>
 script.onerror = function () {
   delete window[callbackName];
   showError("Gagal memuat data. Silakan buka di browser.");
   document.getElementById("openBrowser").style.display = "block";
-};
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
