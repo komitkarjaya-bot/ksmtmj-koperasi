@@ -2,6 +2,12 @@
 
 <h2>Dashboard Anggota</h2>
 
+  <div id="openBrowser" style="display:none;margin-top:15px;">
+  <button onclick="openInChrome()">
+    🔗 Buka di Browser
+  </button>
+</div>
+  
 <div id="loading">⏳ Memuat data anggota...</div>
 
 <div id="error" style="display:none;color:red"></div>
@@ -15,6 +21,17 @@
   <p>Simpanan Sukarela: <span id="sukarela"></span></p>
 </div>
 
+<script>
+function openInChrome() {
+  const url = window.location.href;
+  window.open(url, "_blank");
+}
+</script>
+script.onerror = function () {
+  delete window[callbackName];
+  showError("Gagal memuat data. Silakan buka di browser.");
+  document.getElementById("openBrowser").style.display = "block";
+};
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
