@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
     };
 fetch(
-  "https://script.google.com/macros/s/AKfycbz_EKJm16f84j6cC9VrpivDgeJ_raTsA9iTVzXWlerLZUhna53S9jaS4OxcAfEyjyJo/exec?token=" + token
+  "https://script.google.com/macros/s/AKfycbykVmSd1lWNKj1wWKIwtaJGkUYgwaAveLTDh3Z5X3kwkb01yL9S3OcQ0_MMDBVu3DCZ/exec?token=" + token
 )
 .then(r => r.json())
 .then(data => {
@@ -63,7 +63,9 @@ fetch(
   document.getElementById("noanggota").innerText = data.noanggota;
   document.getElementById("nama").innerText = data.nama;
   document.getElementById("email").innerText = data.email;
-
+  document.getElementById("pokok").innerText = formatRupiah(data.pokok);
+  document.getElementById("wajib").innerText = formatRupiah(data.wajib);
+  document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
   }
 
   function showError(msg) {
