@@ -104,4 +104,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
  
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (!token) {
+    showError("Token tidak ditemukan. Silakan login ulang.");
+  } else {
+    loadDashboardJSONP(token);
+  }
+
+  function loadDashboardJSONP(token) {
+
+    const callbackName = "cb_" + Math.random().toString(36).substr(2, 9);
+
+    window[callbackName] = function (data) {
+
+      delete window[callbackName];
+      const s = document.getElementById("jsonpScript");
+      if (s) s.remove();
+
+      document.getElementById("loading").style.display = "none";
+
+      if (!data || data.error) {
+        showError(data?.error || "Data kosong dari server");
+        return;
+      }
+
+      document.getElementById("data").style.display = "block";
+      document.getElementById("noanggota").innerText = data.noanggota;
+      document.getElementById("nama").innerText = data.nama;
+      document.getElementById("email").innerText = data.email;
+      document.getElementById("pokok").innerText = formatRupiah(data.pokok);
+      document.getElementById("wajib").innerText = formatRupiah(data.wajib);
+      document.getElementById("sukarela").innerText = formatRupiah(data.sukarela);
+    };
+
+    const script = document.createElement("script");
+    script.id = "jsonpScript";
+    script.src =
+      "https://script.google.com/macros/s/AKfycbzoV_72G_J2gJuIz_0x-YIH8FywX4eh45bjkpme9-EySpXE6zKbhwwFw9G3qivzf-AT/exec" +
+      "?token=" + encodeURIComponent(token) +
+      "&callback=" + callbackName;
+
+    script.onerror = function () {
+      delete window[callbackName];
+      showError("Gagal menghubungi server (JSONP).");
+    };
+
+    document.body.appendChild(script);
+  }
+
+  function showError(msg) {
+    document.getElementById("loading").style.display = "none";
+    const e = document.getElementById("error");
+    e.style.display = "block";
+    e.innerText = msg;
+  }
+
+  function formatRupiah(n) {
+    return "Rp " + Number(n || 0).toLocaleString("id-ID");
+  }
+
+});
+</script>
+
+
 </html>
