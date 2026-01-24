@@ -1,17 +1,16 @@
 <body>
 
 <h2>Dashboard Anggota</h2>
- 
-<div id="loading">⏳ Memuat data anggota...</div>
-
-<div id="error" style="display:none;color:red"></div>
+ <div id="error" style="display:none;color:red"></div>
   <div id="openBrowser" style="display:none;margin-top:15px;">
   <button onclick="openInChrome()">
     🔗 Buka di Browser
   </button>
-</div>
-  
-<div id="data" style="display:none">
+  </div>
+
+ <div id="loading">⏳ Memuat data anggota...</div>
+
+ <div id="data" style="display:none">
   <p>No Anggota: <span id="noanggota"></span></p>
   <p>Nama: <span id="nama"></span></p>
   <p>Email: <span id="email"></span></p>
@@ -28,7 +27,7 @@ script.onerror = function () {
   delete window[callbackName];
   showError("Gagal memuat data. Silakan buka di browser.");
   document.getElementById("openBrowser").style.display = "block";
-  </script>
+  
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
