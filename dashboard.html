@@ -20,16 +20,6 @@
 </div>
 
 <script>
-function openInChrome() {
-  const url = window.location.href;
-  window.open(url, "_blank");
- 
-script.onerror = function () {
-  delete window[callbackName];
-  showError("Gagal memuat data. Silakan buka di browser.");
-  document.getElementById("openBrowser").style.display = "block";
-  
-<script>
 document.addEventListener("DOMContentLoaded", function () {
 
   const params = new URLSearchParams(window.location.search);
@@ -97,7 +87,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
+<script>
+function openInChrome() {
+  const url = window.location.href;
+  window.open(url, "_blank");
+ 
+script.onerror = function () {
+  delete window[callbackName];
+  showError("Gagal memuat data. Silakan buka di browser.");
+  document.getElementById("openBrowser").style.display = "block";
+<script>  
 
 </body>
 </html>
